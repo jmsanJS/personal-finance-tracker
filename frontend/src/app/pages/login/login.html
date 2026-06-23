@@ -1,0 +1,34 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h1>Finance Tracker</h1>
+    <h2>Sign in</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <span class="error">Valid email is required</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" placeholder="••••••" />
+        @if (form.get('password')?.invalid && form.get('password')?.touched) {
+          <span class="error">Password must be at least 10 characters</span>
+        }
+      </div>
+
+      @if (error) {
+        <p class="error-banner">{{ error }}</p>
+      }
+
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </form>
+
+    <p class="switch">Don't have an account? <a routerLink="/register">Register</a></p>
+  </div>
+</div>
