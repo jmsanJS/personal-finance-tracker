@@ -1,1 +1,55 @@
-<p>dashboard works!</p>
+<div class="layout">
+  <nav class="navbar">
+    <span class="brand">Finance Tracker</span>
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/transactions" routerLinkActive="active">Transactions</a>
+      <a routerLink="/categories" routerLinkActive="active">Categories</a>
+    </div>
+    <button class="logout" (click)="logout()">Logout</button>
+  </nav>
+
+  <main class="main">
+    <h1>Welcome, {{ authService.currentUser()?.name }}</h1>
+
+    <div class="cards">
+      <div class="card income">
+        <span class="label">Total Income</span>
+        <span class="amount">{{ totalIncome | currency }}</span>
+      </div>
+      <div class="card expense">
+        <span class="label">Total Expenses</span>
+        <span class="amount">{{ totalExpenses | currency }}</span>
+      </div>
+      <div class="card balance" [class.negative]="balance < 0">
+        <span class="label">Balance</span>
+        <span class="amount">{{ balance | currency }}</span>
+      </div>
+    </div>
+
+    <section class="recent">
+      <div class="section-header">
+        <h2>Recent Transactions</h2>
+        <a routerLink="/transactions">View all</a>
+      </div>
+
+      @if (recentTransactions.length === 0) {
+        <p class="empty">No transactions yet. <a routerLink="/transactions">Add one</a></p>
+      } @else {
+        <ul class="transaction-list">
+          @for (t of recentTransactions; track t.id) {
+            <li class="transaction-item">
+              <div class="info">
+                <span class="desc">{{ t.description || 'No description' }}</span>
+                <span class="date">{{ t.date | date: 'mediumDate' }}</span>
+              </div>
+              <span class="tx-amount" [class.expense]="t.type === 'expense'">
+                {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount | currency }}
+              </span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  </main>
+</div>
