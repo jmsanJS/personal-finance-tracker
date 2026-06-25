@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Transaction, TransactionService } from '../../core/services/transaction';
@@ -11,7 +11,7 @@ import { Transaction, TransactionService } from '../../core/services/transaction
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
-  transactions: Transaction[] = [];
+  transactions = signal<Transaction[]>([]);
 
   constructor(
     public authService: AuthService,
@@ -21,18 +21,18 @@ export class Dashboard implements OnInit {
 
   ngOnInit() {
     this.transactionService.getAll().subscribe({
-      next: (data) => (this.transactions = data),
+      next: (data) => this.transactions.set(data),
     });
   }
 
   get totalIncome(): number {
-    return this.transactions
+    return this.transactions()
       .filter((t) => t.type === 'income')
       .reduce((sum, t) => sum + Number(t.amount), 0);
   }
 
   get totalExpenses(): number {
-    return this.transactions
+    return this.transactions()
       .filter((t) => t.type === 'expense')
       .reduce((sum, t) => sum + Number(t.amount), 0);
   }
@@ -42,7 +42,7 @@ export class Dashboard implements OnInit {
   }
 
   get recentTransactions(): Transaction[] {
-    return [...this.transactions]
+    return [...this.transactions()]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, 5);
   }
