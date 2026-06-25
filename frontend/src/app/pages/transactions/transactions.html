@@ -1,1 +1,82 @@
-<p>transactions works!</p>
+<div class="layout">
+  <nav class="navbar">
+    <span class="brand">Finance Tracker</span>
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/transactions" routerLinkActive="active">Transactions</a>
+      <a routerLink="/categories" routerLinkActive="active">Categories</a>
+    </div>
+    <button class="logout" (click)="logout()">Logout</button>
+  </nav>
+  <main class="main">
+    <header>
+      <h1>Transactions</h1>
+      <button class="btn-primary" (click)="showForm = !showForm">Add Transaction</button>
+    </header>
+
+    @if (showForm) {
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="field">
+          <label for="amount">Amount</label>
+          <input id="amount" type="number" formControlName="amount" />
+          @if (form.get('amount')?.invalid && form.get('amount')?.touched) {
+            <span class="error">Amount is required</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="description">Description (optional)</label>
+          <input id="description" type="text" formControlName="description" />
+        </div>
+
+        <div class="field">
+          <label for="date">Date</label>
+          <input id="date" type="date" formControlName="date" />
+          @if (form.get('date')?.invalid && form.get('date')?.touched) {
+            <span class="error">Date is required</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="type">Type</label>
+          <select formControlName="type">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="categoryId">Category</label>
+          <select formControlName="categoryId">
+            <option value="">Select a category</option>
+            @for (c of filteredCategories; track c.id) {
+              <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </div>
+        @if (error()) {
+          <p class="error-banner">{{ error() }}</p>
+        }
+
+        <button class="btn-primary" type="submit">Save</button>
+        <button class="btn-secondary" type="button" (click)="showForm = false">Cancel</button>
+      </form>
+    } @else {
+      @if (loading()) {
+        <p>Loading...</p>
+      } @else if (transactions().length === 0) {
+        <p>No transactions yet.</p>
+      } @else {
+        @for (t of transactions(); track t.id) {
+          <div class="transaction-item">
+            <span>{{ t.description || 'No description' }}</span>
+            <span>{{ t.date | date: 'mediumDate' }}</span>
+            <span class="amount" [class.expense]="t.type === 'expense'">
+              {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount | currency }}
+            </span>
+          </div>
+        }
+      }
+    }
+  </main>
+</div>
