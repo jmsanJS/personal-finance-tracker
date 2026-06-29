@@ -1,1 +1,66 @@
-<p>categories works!</p>
+<div class="layout">
+  <nav class="navbar">
+    <span class="brand">Finance Tracker</span>
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/transactions" routerLinkActive="active">Transactions</a>
+      <a routerLink="/categories" routerLinkActive="active">Categories</a>
+    </div>
+    <button class="logout" (click)="logout()">Logout</button>
+  </nav>
+  <main class="main">
+    <header>
+      <h1>Categories</h1>
+      <button class="btn-primary" (click)="showForm = !showForm">Add Category</button>
+    </header>
+
+    @if (showForm) {
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" type="text" formControlName="name" />
+          @if (form.get('name')?.invalid && form.get('name')?.touched) {
+            <span class="error">Name is required</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="type">Type</label>
+          <select formControlName="type">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="color">Color</label>
+          <input id="color" type="color" formControlName="color" />
+          @if (form.get('color')?.invalid && form.get('color')?.touched) {
+            <span class="error">Color is required</span>
+          }
+        </div>
+
+        @if (error()) {
+          <p class="error-banner">{{ error() }}</p>
+        }
+
+        <button class="btn-primary" type="submit">Save</button>
+        <button class="btn-secondary" type="button" (click)="showForm = false">Cancel</button>
+      </form>
+    } @else {
+      @if (loading()) {
+        <p>Loading...</p>
+      } @else if (categories().length === 0) {
+        <p>No categories yet.</p>
+      } @else {
+        @for (c of categories(); track c.id) {
+          <div class="category-item">
+            <span>{{ c.name }}</span>
+            <span>{{ c.type }}</span>
+            <span class="dot" [style.background]="c.color"></span>
+          </div>
+        }
+      }
+    }
+  </main>
+</div>
