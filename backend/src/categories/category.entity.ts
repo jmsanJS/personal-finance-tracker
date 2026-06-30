@@ -18,6 +18,6 @@ export class Category {
   @ManyToOne(() => User)
   user: User;
 
-  @Column()
+  @Column({ nullable: true })
   userId: number;
 }
