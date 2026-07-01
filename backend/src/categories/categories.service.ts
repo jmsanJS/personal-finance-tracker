@@ -1,8 +1,9 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { IsNull, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoriesService implements OnModuleInit {
@@ -54,5 +55,29 @@ export class CategoriesService implements OnModuleInit {
   async create(dto: CreateCategoryDto, userId: number): Promise<Category> {
     const category = this.categoriesRepository.create({ ...dto, userId });
     return this.categoriesRepository.save(category);
+  }
+
+  async update(
+    id: number,
+    dto: UpdateCategoryDto,
+    userId: number,
+  ): Promise<Category> {
+    const category = await this.categoriesRepository.findOne({
+      where: { id, userId },
+    });
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+    return this.categoriesRepository.save({ ...category, ...dto });
+  }
+
+  async remove(id: number, userId: number): Promise<void> {
+    const category = await this.categoriesRepository.findOne({
+      where: { id, userId },
+    });
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+    await this.categoriesRepository.remove(category);
   }
 }
