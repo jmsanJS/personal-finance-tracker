@@ -169,7 +169,48 @@
     }
 
     span {
-      width: 33.33%;
+      width: 30%;
+    }
+
+    .category-actions {
+      width: 10%;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+  }
+
+  .btn-edit,
+  .btn-delete {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .material-icons {
+      font-size: 1.1rem;
+    }
+  }
+
+  .btn-edit {
+    color: #6b7280;
+
+    &:hover {
+      background: #f3f4f6;
+      color: #374151;
+    }
+  }
+
+  .btn-delete {
+    color: #f87171;
+
+    &:hover {
+      background: #fef2f2;
+      color: #dc2626;
     }
   }
 }

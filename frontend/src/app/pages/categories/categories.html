@@ -44,8 +44,8 @@
           <p class="error-banner">{{ error() }}</p>
         }
 
-        <button class="btn-primary" type="submit">Save</button>
-        <button class="btn-secondary" type="button" (click)="showForm = false">Cancel</button>
+        <button class="btn-primary" type="submit">{{ editingCategory() ? 'Update' : 'Save' }}</button>
+        <button class="btn-secondary" type="button" (click)="resetForm()">Cancel</button>
       </form>
     } @else {
       @if (loading()) {
@@ -58,6 +58,18 @@
             <span>{{ c.name }}</span>
             <span>{{ c.type }}</span>
             <span class="dot" [style.background]="c.color"></span>
+            @if (c.userId !== null) {
+              <div class="category-actions">
+                <button class="btn-edit" (click)="onEdit(c)" title="Edit">
+                  <span class="material-icons">edit</span>
+                </button>
+                <button class="btn-delete" (click)="onDelete(c)" title="Delete">
+                  <span class="material-icons">delete</span>
+                </button>
+              </div>
+            } @else {
+              <div class="category-actions"></div>
+            }
           </div>
         }
       }

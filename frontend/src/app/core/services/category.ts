@@ -7,6 +7,7 @@ export interface Category {
   name: string;
   type: 'income' | 'expense';
   color: string;
+  userId: number | null;
 }
 
 export interface CreateCategoryDto {
@@ -27,5 +28,13 @@ export class CategoryService {
 
   create(data: CreateCategoryDto) {
     return this.http.post<Category>(this.apiUrl, data);
+  }
+
+  update(id: number, data: Partial<CreateCategoryDto>) {
+    return this.http.put<Category>(`${this.apiUrl}/${id}`, data);
+  }
+
+  delete(id: number) {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

@@ -15,6 +15,7 @@ export class Categories implements OnInit {
   showForm = false;
   loading = signal(true);
   error = signal('');
+  editingCategory = signal<Category | null>(null);
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.maxLength(20)]),
@@ -38,27 +39,50 @@ export class Categories implements OnInit {
     });
   }
 
+  onEdit(category: Category) {
+    this.editingCategory.set(category);
+    this.form.setValue({ name: category.name, type: category.type, color: category.color });
+    this.showForm = true;
+  }
+
+  onDelete(category: Category) {
+    this.categoryService.delete(category.id).subscribe({
+      next: () => this.categories.set(this.categories().filter(c => c.id !== category.id)),
+      error: () => this.error.set('Failed to delete category'),
+    });
+  }
+
   onSubmit() {
     if (this.form.invalid) return;
 
     this.error.set('');
 
     const { name, type, color } = this.form.value;
+    const editing = this.editingCategory();
 
-    this.categoryService
-      .create({
-        name: name!,
-        type: type!,
-        color: color!,
-      })
-      .subscribe({
+    if (editing) {
+      this.categoryService.update(editing.id, { name: name!, type: type!, color: color! }).subscribe({
+        next: (updated) => {
+          this.categories.set(this.categories().map(c => c.id === updated.id ? updated : c));
+          this.resetForm();
+        },
+        error: () => this.error.set('Failed to update category'),
+      });
+    } else {
+      this.categoryService.create({ name: name!, type: type!, color: color! }).subscribe({
         next: (c) => {
           this.categories.set([c, ...this.categories()]);
-          this.form.reset({ type: 'expense' });
-          this.showForm = false;
+          this.resetForm();
         },
         error: () => this.error.set('Failed to create category'),
       });
+    }
+  }
+
+  resetForm() {
+    this.form.reset({ type: 'expense', color: '#6366f1' });
+    this.editingCategory.set(null);
+    this.showForm = false;
   }
 
   logout() {
