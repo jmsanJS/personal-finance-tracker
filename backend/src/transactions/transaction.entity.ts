@@ -13,7 +13,15 @@ export class Transaction {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      to: (v: number) => v,
+      from: (v: string) => parseFloat(v),
+    },
+  })
   amount: number;
 
   @Column({ nullable: true })
