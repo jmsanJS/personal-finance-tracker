@@ -59,7 +59,7 @@
         }
 
         <button class="btn-primary" type="submit">Save</button>
-        <button class="btn-secondary" type="button" (click)="showForm = false">Cancel</button>
+        <button class="btn-secondary" type="button" (click)="resetForm()">Cancel</button>
       </form>
     } @else {
       @if (loading()) {
@@ -69,11 +69,23 @@
       } @else {
         @for (t of transactions(); track t.id) {
           <div class="transaction-item">
-            <span>{{ t.description || 'No description' }}</span>
+            @if (!t.description) {
+              <span class="no-description">(No description)</span>
+            } @else {
+              <span>{{ t.description }}</span>
+            }
             <span>{{ t.date | date: 'mediumDate' }}</span>
             <span class="amount" [class.expense]="t.type === 'expense'">
               {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount | currency }}
             </span>
+            <div class="transaction-actions">
+              <button class="btn-edit" (click)="onEdit(t)" title="Edit">
+                <span class="material-icons">edit</span>
+              </button>
+              <button class="btn-delete" (click)="onDelete(t)" title="Delete">
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
           </div>
         }
       }

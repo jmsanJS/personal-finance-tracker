@@ -18,6 +18,7 @@ export class Transactions implements OnInit {
   showForm = false;
   loading = signal(true);
   error = signal('');
+  editingTransaction = signal<Transaction | null>(null);
 
   form = new FormGroup({
     amount: new FormControl('', [Validators.required, Validators.min(0.01)]),
@@ -57,23 +58,69 @@ export class Transactions implements OnInit {
     this.error.set('');
 
     const { amount, description, date, type, categoryId } = this.form.value;
+    const editing = this.editingTransaction();
 
-    this.transactionService
-      .create({
-        amount: Number(amount!),
-        description: description || undefined,
-        date: date!,
-        type: type!,
-        categoryId: Number(categoryId!),
-      })
-      .subscribe({
-        next: (t) => {
-          this.transactions.set([t, ...this.transactions()]);
-          this.form.reset({ type: 'expense' });
-          this.showForm = false;
-        },
-        error: () => this.error.set('Failed to create transaction'),
-      });
+    if (editing) {
+      this.transactionService
+        .update(editing.id, {
+          amount: Number(amount!),
+          description: description || undefined,
+          date: date!,
+          type: type!,
+          categoryId: Number(categoryId!),
+        })
+        .subscribe({
+          next: (updated) => {
+            this.transactions.set(
+              this.transactions().map((t) => (t.id === updated.id ? updated : t)),
+            );
+            this.resetForm();
+          },
+          error: () => this.error.set('Failed to update transaction'),
+        });
+    } else {
+      this.transactionService
+        .create({
+          amount: Number(amount!),
+          description: description || undefined,
+          date: date!,
+          type: type!,
+          categoryId: Number(categoryId!),
+        })
+        .subscribe({
+          next: (t) => {
+            this.transactions.set([t, ...this.transactions()]);
+            this.form.reset({ type: 'expense' });
+            this.showForm = false;
+          },
+          error: () => this.error.set('Failed to create transaction'),
+        });
+    }
+  }
+
+  onEdit(transaction: Transaction) {
+    this.editingTransaction.set(transaction);
+    this.form.setValue({
+      amount: transaction.amount.toString(),
+      description: transaction.description || '',
+      date: transaction.date,
+      type: transaction.type,
+      categoryId: transaction.categoryId.toString(),
+    });
+    this.showForm = true;
+  }
+
+  onDelete(transaction: Transaction) {
+    this.transactionService.delete(transaction.id).subscribe({
+      next: () => this.transactions.set(this.transactions().filter((t) => t.id !== transaction.id)),
+      error: () => this.error.set('Failed to delete transaction'),
+    });
+  }
+
+  resetForm() {
+    this.form.reset({ type: 'expense' });
+    this.editingTransaction.set(null);
+    this.showForm = false;
   }
 
   logout() {

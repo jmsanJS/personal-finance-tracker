@@ -132,7 +132,9 @@
     cursor: pointer;
     transition: background 0.2s;
 
-    &:hover { background: #4f46e5; }
+    &:hover {
+      background: #4f46e5;
+    }
   }
 
   .btn-secondary {
@@ -147,7 +149,9 @@
     transition: background 0.2s;
     margin-left: 0.5rem;
 
-    &:hover { background: #f3f4f6; }
+    &:hover {
+      background: #f3f4f6;
+    }
   }
 
   .transaction-item {
@@ -156,12 +160,62 @@
     align-items: center;
     padding: 0.75rem 0;
     border-bottom: 1px solid #f3f4f6;
+  }
 
-    .amount {
-      color: #16a34a;
-      font-weight: 600;
+  .no-description {
+    color: #6b7280;
+    font-style: italic;
+  }
+
+  .amount {
+    color: #16a34a;
+    font-weight: 600;
+  }
+  .amount.expense {
+    color: #dc2626;
+  }
+
+  span {
+    width: 30%;
+  }
+
+  .transaction-actions {
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  .btn-edit,
+  .btn-delete {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .material-icons {
+      font-size: 1.1rem;
     }
-    .amount.expense {
+  }
+
+  .btn-edit {
+    color: #6b7280;
+
+    &:hover {
+      background: #f3f4f6;
+      color: #374151;
+    }
+  }
+
+  .btn-delete {
+    color: #f87171;
+
+    &:hover {
+      background: #fef2f2;
       color: #dc2626;
     }
   }
