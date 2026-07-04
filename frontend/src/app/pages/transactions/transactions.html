@@ -11,7 +11,9 @@
   <main class="main">
     <header>
       <h1>Transactions</h1>
-      <button class="btn-primary" (click)="showForm = !showForm">Add Transaction</button>
+      <button class="btn-primary" (click)="showForm = !showForm">
+        {{ !showForm ? 'Add Transaction' : 'Close Form' }}
+      </button>
     </header>
 
     @if (showForm) {
@@ -67,18 +69,26 @@
       } @else if (transactions().length === 0) {
         <p>No transactions yet.</p>
       } @else {
+        <div class="transaction-header">
+          <span class="col-date">Date</span>
+          <span class="col-desc">Description</span>
+          <span class="col-cat">Category</span>
+          <span class="col-amount">Amount</span>
+          <span class="col-actions">Actions</span>
+        </div>
         @for (t of transactions(); track t.id) {
           <div class="transaction-item">
+            <span class="col-date">{{ t.date | date: 'mediumDate' }}</span>
             @if (!t.description) {
-              <span class="no-description">(No description)</span>
+              <span class="col-desc no-description">(No description)</span>
             } @else {
-              <span>{{ t.description }}</span>
+              <span class="col-desc">{{ t.description }}</span>
             }
-            <span>{{ t.date | date: 'mediumDate' }}</span>
-            <span class="amount" [class.expense]="t.type === 'expense'">
+            <span class="col-cat">{{ getCategoryName(t.categoryId) }}</span>
+            <span class="col-amount amount" [class.expense]="t.type === 'expense'">
               {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount | currency }}
             </span>
-            <div class="transaction-actions">
+            <div class="col-actions transaction-actions">
               <button class="btn-edit" (click)="onEdit(t)" title="Edit">
                 <span class="material-icons">edit</span>
               </button>

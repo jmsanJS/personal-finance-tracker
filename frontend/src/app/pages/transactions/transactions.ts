@@ -52,6 +52,14 @@ export class Transactions implements OnInit {
     return this.categories().filter((c) => c.type === this.form.value.type);
   }
 
+  getCategoryName(categoryId: number): string {
+    return this.categories().find((c) => c.id === categoryId)?.name ?? '—';
+  }
+
+  private sortByDate(list: Transaction[]): Transaction[] {
+    return [...list].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }
+
   onSubmit() {
     if (this.form.invalid) return;
 
@@ -72,7 +80,7 @@ export class Transactions implements OnInit {
         .subscribe({
           next: (updated) => {
             this.transactions.set(
-              this.transactions().map((t) => (t.id === updated.id ? updated : t)),
+              this.sortByDate(this.transactions().map((t) => (t.id === updated.id ? updated : t))),
             );
             this.resetForm();
           },
@@ -89,7 +97,7 @@ export class Transactions implements OnInit {
         })
         .subscribe({
           next: (t) => {
-            this.transactions.set([t, ...this.transactions()]);
+            this.transactions.set(this.sortByDate([t, ...this.transactions()]));
             this.form.reset({ type: 'expense' });
             this.showForm = false;
           },

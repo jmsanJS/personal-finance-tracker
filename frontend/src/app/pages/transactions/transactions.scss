@@ -154,6 +154,18 @@
     }
   }
 
+  .transaction-header {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid #e5e7eb;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
   .transaction-item {
     display: flex;
     justify-content: space-between;
@@ -175,12 +187,24 @@
     color: #dc2626;
   }
 
-  span {
-    width: 30%;
+  .col-date {
+    width: 15%;
+  }
+  .col-desc {
+    width: 35%;
+  }
+  .col-cat {
+    width: 20%;
+  }
+  .col-amount {
+    width: 20%;
+  }
+  .col-actions {
+    width: 10%;
+    text-align: end;
   }
 
   .transaction-actions {
-    width: 10%;
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
