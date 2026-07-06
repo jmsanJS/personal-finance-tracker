@@ -26,16 +26,14 @@ export class CategoriesService implements OnModuleInit {
         { name: 'Health', type: 'expense', color: '#ec4899' },
         { name: 'Entertainment', type: 'expense', color: '#8b5cf6' },
         { name: 'Shopping', type: 'expense', color: '#06b6d4' },
-        { name: 'Utilities', type: 'expense', color: '#64748b' },
         { name: 'Education', type: 'expense', color: '#0ea5e9' },
         { name: 'Sports', type: 'expense', color: '#22c55e' },
         { name: 'Holidays', type: 'expense', color: '#fb923c' },
-        { name: 'Presents', type: 'expense', color: '#f43f5e' },
         { name: 'Donations', type: 'expense', color: '#a78bfa' },
         { name: 'Insurance', type: 'expense', color: '#475569' },
+        { name: 'Other Expense', type: 'expense', color: '#d58e21' },
         // Income
         { name: 'Salary', type: 'income', color: '#16a34a' },
-        { name: 'Freelance', type: 'income', color: '#10b981' },
         { name: 'Investments', type: 'income', color: '#6366f1' },
         { name: 'Other Income', type: 'income', color: '#84cc16' },
         { name: 'Bonus', type: 'income', color: '#f59e0b' },
@@ -49,6 +47,7 @@ export class CategoriesService implements OnModuleInit {
       .createQueryBuilder('category')
       .where('category.userId = :userId', { userId })
       .orWhere('category.userId IS NULL')
+      .orderBy('category.name', 'ASC')
       .getMany();
   }
 
