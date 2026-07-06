@@ -11,7 +11,9 @@
   <main class="main">
     <header>
       <h1>Categories</h1>
-      <button class="btn-primary" (click)="showForm = !showForm">Add Category</button>
+      <button class="btn-primary" (click)="showForm = !showForm">
+        {{ !showForm ? 'Add Category' : 'Close Form' }}
+      </button>
     </header>
 
     @if (showForm) {
@@ -44,7 +46,9 @@
           <p class="error-banner">{{ error() }}</p>
         }
 
-        <button class="btn-primary" type="submit">{{ editingCategory() ? 'Update' : 'Save' }}</button>
+        <button class="btn-primary" type="submit">
+          {{ editingCategory() ? 'Update' : 'Save' }}
+        </button>
         <button class="btn-secondary" type="button" (click)="resetForm()">Cancel</button>
       </form>
     } @else {

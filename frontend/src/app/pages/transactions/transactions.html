@@ -55,7 +55,11 @@
               <option [value]="c.id">{{ c.name }}</option>
             }
           </select>
+          @if (form.get('categoryId')?.invalid && form.get('categoryId')?.touched) {
+            <span class="error">Category is required</span>
+          }
         </div>
+
         @if (error()) {
           <p class="error-banner">{{ error() }}</p>
         }

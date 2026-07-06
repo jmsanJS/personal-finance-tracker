@@ -19,11 +19,12 @@ export class Transactions implements OnInit {
   loading = signal(true);
   error = signal('');
   editingTransaction = signal<Transaction | null>(null);
+  today = new Date().toISOString().slice(0, 10);
 
   form = new FormGroup({
     amount: new FormControl('', [Validators.required, Validators.min(0.01)]),
     description: new FormControl(''),
-    date: new FormControl('', Validators.required),
+    date: new FormControl(this.today, Validators.required),
     type: new FormControl<'income' | 'expense'>('expense', Validators.required),
     categoryId: new FormControl('', Validators.required),
   });
@@ -61,11 +62,14 @@ export class Transactions implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.invalid) return;
-
-    this.error.set('');
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     const { amount, description, date, type, categoryId } = this.form.value;
+    this.error.set('');
+
     const editing = this.editingTransaction();
 
     if (editing) {
