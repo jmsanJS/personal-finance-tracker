@@ -1,9 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Transaction } from './transaction.entity';
-import { Repository } from 'typeorm';
+import {
+  Between,
+  FindOptionsWhere,
+  ILike,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { FindTransactionsDto } from './dto/find-transactions.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -12,9 +20,27 @@ export class TransactionsService {
     private transactionsRepository: Repository<Transaction>,
   ) {}
 
-  async findAll(userId: number): Promise<Transaction[]> {
+  async findAll(
+    userId: number,
+    query: FindTransactionsDto,
+  ): Promise<Transaction[]> {
+    const where: FindOptionsWhere<Transaction> = { userId };
+
+    if (query.type) where.type = query.type;
+    if (query.categoryId) where.categoryId = query.categoryId;
+    if (query.description) where.description = ILike(`%${query.description}%`);
+
+    if (query.amountFrom && query.amountTo)
+      where.amount = Between(query.amountFrom, query.amountTo);
+    else if (query.amountFrom) where.amount = MoreThanOrEqual(query.amountFrom);
+    else if (query.amountTo) where.amount = LessThanOrEqual(query.amountTo);
+
+    if (query.from && query.to) where.date = Between(query.from, query.to);
+    else if (query.from) where.date = MoreThanOrEqual(query.from);
+    else if (query.to) where.date = LessThanOrEqual(query.to);
+
     return this.transactionsRepository.find({
-      where: { userId },
+      where,
       order: { date: 'DESC' },
     });
   }
