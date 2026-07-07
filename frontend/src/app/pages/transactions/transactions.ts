@@ -20,6 +20,12 @@ export class Transactions implements OnInit {
   error = signal('');
   editingTransaction = signal<Transaction | null>(null);
   today = new Date().toISOString().slice(0, 10);
+  type = signal('');
+  category = signal('');
+  fromDate = signal('');
+  toDate = signal('');
+  amountFrom = signal('');
+  amountTo = signal('');
 
   form = new FormGroup({
     amount: new FormControl('', [Validators.required, Validators.min(0.01)]),
@@ -37,16 +43,29 @@ export class Transactions implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.transactionService.getAll().subscribe({
-      next: (data) => {
-        this.transactions.set(data);
-        this.loading.set(false);
-      },
-      error: () => this.loading.set(false),
-    });
+    this.loadTransactions();
     this.categoryService.getAll().subscribe({
       next: (data) => this.categories.set(data),
     });
+  }
+
+  private loadTransactions() {
+    this.transactionService
+      .getAll({
+        type: this.type(),
+        category: this.category(),
+        from: this.fromDate(),
+        to: this.toDate(),
+        amountFrom: this.amountFrom(),
+        amountTo: this.amountTo(),
+      })
+      .subscribe({
+        next: (data) => {
+          this.transactions.set(data);
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false),
+      });
   }
 
   get filteredCategories() {
@@ -127,6 +146,43 @@ export class Transactions implements OnInit {
       next: () => this.transactions.set(this.transactions().filter((t) => t.id !== transaction.id)),
       error: () => this.error.set('Failed to delete transaction'),
     });
+  }
+
+  onSelectTypeChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.type.set(value);
+    this.loadTransactions();
+  }
+
+  onSelectCategoryChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.category.set(value);
+    this.loadTransactions();
+  }
+
+  onChangeFrom(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.fromDate.set(value);
+    this.loadTransactions();
+  }
+
+  onChangeTo(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.toDate.set(value);
+    this.loadTransactions();
+  }
+
+  onChangeAmountFrom(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.amountFrom.set(value);
+    this.loadTransactions();
+
+  }
+
+  onChangeAmountTo(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.amountTo.set(value);
+    this.loadTransactions();
   }
 
   resetForm() {
