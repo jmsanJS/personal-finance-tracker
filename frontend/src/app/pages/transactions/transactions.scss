@@ -71,6 +71,13 @@
     }
   }
 
+  .search-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    align-items: end;
+  }
+
   .field {
     display: flex;
     flex-direction: column;
