@@ -23,7 +23,7 @@ export class TransactionsService {
   async findAll(
     userId: number,
     query: FindTransactionsDto,
-  ): Promise<Transaction[]> {
+  ): Promise<{ data: Transaction[]; total: number }> {
     const where: FindOptionsWhere<Transaction> = { userId };
 
     if (query.type) where.type = query.type;
@@ -39,7 +39,10 @@ export class TransactionsService {
     else if (query.from) where.date = MoreThanOrEqual(query.from);
     else if (query.to) where.date = LessThanOrEqual(query.to);
 
-    return this.transactionsRepository.find({
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 25;
+
+    const [data, total] = await this.transactionsRepository.findAndCount({
       where,
       order: { date: 'DESC' },
     });

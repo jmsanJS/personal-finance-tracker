@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  Min,
 } from 'class-validator';
 
 export class FindTransactionsDto {
@@ -39,4 +40,15 @@ export class FindTransactionsDto {
   @Type(() => Number)
   @IsNumber()
   categoryId?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  page?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsIn([25, 50])
+  limit?: number;
 }
