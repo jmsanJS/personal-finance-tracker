@@ -14,6 +14,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 })
 export class Transactions implements OnInit {
   transactions = signal<Transaction[]>([]);
+  total = signal(0);
   categories = signal<Category[]>([]);
   showForm = false;
   loading = signal(true);
@@ -26,6 +27,8 @@ export class Transactions implements OnInit {
   toDate = signal('');
   amountFrom = signal('');
   amountTo = signal('');
+  page = signal(1);
+  limit = signal(25);
 
   form = new FormGroup({
     amount: new FormControl('', [Validators.required, Validators.min(0.01)]),
@@ -58,10 +61,13 @@ export class Transactions implements OnInit {
         to: this.toDate(),
         amountFrom: this.amountFrom(),
         amountTo: this.amountTo(),
+        page: this.page(),
+        limit: this.limit(),
       })
       .subscribe({
-        next: (data) => {
-          this.transactions.set(data);
+        next: (response) => {
+          this.transactions.set(response.data);
+          this.total.set(response.total);
           this.loading.set(false);
         },
         error: () => this.loading.set(false),
@@ -151,38 +157,66 @@ export class Transactions implements OnInit {
   onSelectTypeChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
     this.type.set(value);
+    this.page.set(1);
     this.loadTransactions();
   }
 
   onSelectCategoryChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
     this.category.set(value);
+    this.page.set(1);
     this.loadTransactions();
   }
 
   onChangeFrom(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.fromDate.set(value);
+    this.page.set(1);
     this.loadTransactions();
   }
 
   onChangeTo(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.toDate.set(value);
+    this.page.set(1);
     this.loadTransactions();
   }
 
   onChangeAmountFrom(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.amountFrom.set(value);
+    this.page.set(1);
     this.loadTransactions();
-
   }
 
   onChangeAmountTo(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.amountTo.set(value);
+    this.page.set(1);
     this.loadTransactions();
+  }
+
+  onPrevPage() {
+    if (this.page() === 1) return;
+    this.page.update((p) => p - 1);
+    this.loadTransactions();
+  }
+
+  onNextPage() {
+    if (!this.hasNextPage()) return;
+    this.page.update((p) => p + 1);
+    this.loadTransactions();
+  }
+
+  onLimitChange(event: Event) {
+    const value = Number((event.target as HTMLSelectElement).value);
+    this.limit.set(value);
+    this.page.set(1);
+    this.loadTransactions();
+  }
+
+  hasNextPage(): boolean {
+    return this.page() * this.limit() < this.total();
   }
 
   resetForm() {

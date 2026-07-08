@@ -33,6 +33,8 @@ export class TransactionService {
     to?: string;
     amountFrom?: string;
     amountTo?: string;
+    page?: number;
+    limit?: number;
   }) {
     let params = new HttpParams();
     if (filters?.type) params = params.set('type', filters.type);
@@ -41,7 +43,10 @@ export class TransactionService {
     if (filters?.to) params = params.set('to', filters.to);
     if (filters?.amountFrom) params = params.set('amountFrom', filters.amountFrom);
     if (filters?.amountTo) params = params.set('amountTo', filters.amountTo);
-    return this.http.get<Transaction[]>(this.apiUrl, { params });
+    if (filters?.page) params = params.set('page', filters.page.toString());
+    if (filters?.limit) params = params.set('limit', filters.limit.toString());
+
+    return this.http.get<{ data: Transaction[]; total: number }>(this.apiUrl, { params });
   }
 
   create(data: CreateTransactionDto) {

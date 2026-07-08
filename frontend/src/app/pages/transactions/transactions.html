@@ -68,67 +68,68 @@
         <button class="btn-secondary" type="button" (click)="resetForm()">Cancel</button>
       </form>
     } @else {
+      <section class="search-container">
+        <div>
+          <div class="field">
+            <label for="type-select">Type:</label>
+            <select id="type-select" (change)="onSelectTypeChange($event)">
+              <option value="">All</option>
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="category-select">Category:</label>
+            <select id="category-select" (change)="onSelectCategoryChange($event)">
+              <option value="">All</option>
+              @for (c of categories(); track c.id) {
+                <option [value]="c.id">{{ c.name }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <div class="field">
+            <label for="from">Date from:</label>
+            <input type="date" id="from" (change)="onChangeFrom($event)" />
+          </div>
+
+          <div class="field">
+            <label for="to">To:</label>
+            <input type="date" id="to" (change)="onChangeTo($event)" />
+          </div>
+        </div>
+
+        <div>
+          <div class="field">
+            <label for="amountFrom">Amount between:</label>
+            <input
+              type="number"
+              id="amountFrom"
+              placeholder="0"
+              (change)="onChangeAmountFrom($event)"
+            />
+          </div>
+
+          <div class="field">
+            <label for="amountTo">And:</label>
+            <input
+              type="number"
+              id="amountTo"
+              placeholder="0"
+              (change)="onChangeAmountTo($event)"
+            />
+          </div>
+        </div>
+      </section>
+
       @if (loading()) {
         <p>Loading...</p>
       } @else if (transactions().length === 0) {
-        <p>No transactions yet.</p>
+        <p>No transactions match your filters.</p>
       } @else {
-        <section class="search-container">
-          <div>
-            <div class="field">
-              <label for="type-select">Type:</label>
-              <select id="type-select" (change)="onSelectTypeChange($event)">
-                <option value="">All</option>
-                <option value="expense">Expense</option>
-                <option value="income">Income</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="category-select">Category:</label>
-              <select id="category-select" (change)="onSelectCategoryChange($event)">
-                <option value="">All</option>
-                @for (c of categories(); track c.id) {
-                  <option [value]="c.id">{{ c.name }}</option>
-                }
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <div class="field">
-              <label for="from">Date from:</label>
-              <input type="date" id="from" (change)="onChangeFrom($event)" />
-            </div>
-
-            <div class="field">
-              <label for="to">To:</label>
-              <input type="date" id="to" (change)="onChangeTo($event)" />
-            </div>
-          </div>
-
-          <div>
-            <div class="field">
-              <label for="amountFrom">Amount between:</label>
-              <input
-                type="number"
-                id="amountFrom"
-                placeholder="0"
-                (change)="onChangeAmountFrom($event)"
-              />
-            </div>
-
-            <div class="field">
-              <label for="amountTo">And:</label>
-              <input
-                type="number"
-                id="amountTo"
-                placeholder="0"
-                (change)="onChangeAmountTo($event)"
-              />
-            </div>
-          </div>
-        </section>
         <div class="transaction-header">
           <span class="col-date">Date</span>
           <span class="col-desc">Description</span>
@@ -158,6 +159,36 @@
             </div>
           </div>
         }
+
+        <div class="pagination">
+          <button
+            class="btn-secondary"
+            type="button"
+            (click)="onPrevPage()"
+            [disabled]="page() === 1"
+          >
+            Previous
+          </button>
+
+          <span class="pagination-status">Page {{ page() }}</span>
+
+          <button
+            class="btn-secondary"
+            type="button"
+            (click)="onNextPage()"
+            [disabled]="!hasNextPage()"
+          >
+            Next
+          </button>
+
+          <div class="field pagination-limit">
+            <label for="limit-select">Per page:</label>
+            <select id="limit-select" (change)="onLimitChange($event)">
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
       }
     }
   </main>
