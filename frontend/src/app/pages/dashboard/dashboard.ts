@@ -2,7 +2,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { Transaction, TransactionService } from '../../core/services/transaction';
+import { Summary, Transaction, TransactionService } from '../../core/services/transaction';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +12,8 @@ import { Transaction, TransactionService } from '../../core/services/transaction
 })
 export class Dashboard implements OnInit {
   transactions = signal<Transaction[]>([]);
+  total = signal(0);
+  summary = signal<Summary | null>(null);
 
   constructor(
     public authService: AuthService,
@@ -21,24 +23,23 @@ export class Dashboard implements OnInit {
 
   ngOnInit() {
     this.transactionService.getAll().subscribe({
-      next: (data) => this.transactions.set(data),
+      next: (response) => this.transactions.set(response.data),
+    });
+    this.transactionService.getSummary().subscribe({
+      next: (response) => this.summary.set(response),
     });
   }
 
   get totalIncome(): number {
-    return this.transactions()
-      .filter((t) => t.type === 'income')
-      .reduce((sum, t) => sum + Number(t.amount), 0);
+    return this.summary()?.totalIncome ?? 0;
   }
 
   get totalExpenses(): number {
-    return this.transactions()
-      .filter((t) => t.type === 'expense')
-      .reduce((sum, t) => sum + Number(t.amount), 0);
+    return this.summary()?.totalExpenses ?? 0;
   }
 
   get balance(): number {
-    return this.totalIncome - this.totalExpenses;
+    return this.summary()?.balance ?? 0;
   }
 
   get recentTransactions(): Transaction[] {

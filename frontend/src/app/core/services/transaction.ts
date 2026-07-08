@@ -20,6 +20,12 @@ export interface CreateTransactionDto {
   categoryId: number;
 }
 
+export interface Summary {
+  totalIncome: number;
+  totalExpenses: number;
+  balance: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
   private apiUrl = `${environment.apiUrl}/transactions`;
@@ -47,6 +53,10 @@ export class TransactionService {
     if (filters?.limit) params = params.set('limit', filters.limit.toString());
 
     return this.http.get<{ data: Transaction[]; total: number }>(this.apiUrl, { params });
+  }
+
+  getSummary() {
+    return this.http.get<Summary>(`${this.apiUrl}/summary`);
   }
 
   create(data: CreateTransactionDto) {
