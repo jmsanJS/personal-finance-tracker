@@ -13,6 +13,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { FindTransactionsDto } from './dto/find-transactions.dto';
 
+export interface Summary {
+  totalIncome: number;
+  totalExpenses: number;
+  balance: number;
+}
+
 @Injectable()
 export class TransactionsService {
   constructor(
@@ -45,7 +51,34 @@ export class TransactionsService {
     const [data, total] = await this.transactionsRepository.findAndCount({
       where,
       order: { date: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
     });
+
+    return { data, total };
+  }
+
+  async getSummary(userId: number): Promise<Summary> {
+    const rows: { type: string; sum: string }[] =
+      await this.transactionsRepository
+        .createQueryBuilder('t')
+        .select('t.type', 'type')
+        .addSelect('SUM(t.amount)', 'sum')
+        .where('t.userId = :userId', { userId })
+        .groupBy('t.type')
+        .getRawMany();
+
+    const incomeRow = rows.find((r) => r.type === 'income');
+    const expenseRow = rows.find((r) => r.type === 'expense');
+
+    const totalIncome = parseFloat(incomeRow?.sum ?? '0');
+    const totalExpenses = parseFloat(expenseRow?.sum ?? '0');
+
+    return {
+      totalIncome,
+      totalExpenses,
+      balance: totalIncome - totalExpenses,
+    };
   }
 
   async create(
