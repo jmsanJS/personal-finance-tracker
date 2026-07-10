@@ -12,7 +12,7 @@
   <main class="main">
     <h1>Welcome, {{ authService.currentUser()?.name }}</h1>
 
-    <div class="cards">
+    <section class="cards">
       <div class="card income">
         <span class="label">Total Income</span>
         <span class="amount">{{ totalIncome | currency }}</span>
@@ -25,7 +25,7 @@
         <span class="label">Balance</span>
         <span class="amount">{{ balance | currency }}</span>
       </div>
-    </div>
+    </section>
 
     <section class="recent">
       <div class="section-header">
@@ -50,6 +50,10 @@
           }
         </ul>
       }
+    </section>
+
+    <section class="chart-container">
+      <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="'pie'"></canvas>
     </section>
   </main>
 </div>

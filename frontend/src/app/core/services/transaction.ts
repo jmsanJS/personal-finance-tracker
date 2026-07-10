@@ -26,6 +26,12 @@ export interface Summary {
   balance: number;
 }
 
+export interface CategorySummary {
+  categoryId: number;
+  categoryName: string;
+  total: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
   private apiUrl = `${environment.apiUrl}/transactions`;
@@ -57,6 +63,10 @@ export class TransactionService {
 
   getSummary() {
     return this.http.get<Summary>(`${this.apiUrl}/summary`);
+  }
+
+  getCategorySummary() {
+    return this.http.get<CategorySummary[]>(`${this.apiUrl}/summary/by-category`)
   }
 
   create(data: CreateTransactionDto) {

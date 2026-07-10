@@ -2,11 +2,17 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { Summary, Transaction, TransactionService } from '../../core/services/transaction';
+import {
+  CategorySummary,
+  Summary,
+  Transaction,
+  TransactionService,
+} from '../../core/services/transaction';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CurrencyPipe, DatePipe, RouterLink],
+  imports: [CurrencyPipe, DatePipe, RouterLink, BaseChartDirective],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -14,6 +20,7 @@ export class Dashboard implements OnInit {
   transactions = signal<Transaction[]>([]);
   total = signal(0);
   summary = signal<Summary | null>(null);
+  categorySummary = signal<CategorySummary[]>([]);
 
   constructor(
     public authService: AuthService,
@@ -27,6 +34,9 @@ export class Dashboard implements OnInit {
     });
     this.transactionService.getSummary().subscribe({
       next: (response) => this.summary.set(response),
+    });
+    this.transactionService.getCategorySummary().subscribe({
+      next: (response) => this.categorySummary.set(response),
     });
   }
 
@@ -47,6 +57,25 @@ export class Dashboard implements OnInit {
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, 5);
   }
+
+  get pieChartData() {
+    const data = this.categorySummary();
+    return {
+      labels: data.map((c) => c.categoryName),
+      datasets: [
+        {
+          data: data.map((c) => c.total),
+          label: 'Expenses',
+        },
+      ],
+      hoverOffset: 4,
+    };
+  }
+
+  pieChartOptions = {
+    responsive: true,
+
+  };
 
   logout() {
     this.authService.logout();

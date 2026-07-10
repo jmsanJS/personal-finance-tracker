@@ -90,13 +90,22 @@
     font-weight: 700;
   }
 
-  &.income .amount { color: #16a34a; }
-  &.expense .amount { color: #dc2626; }
-  &.balance .amount { color: #6366f1; }
-  &.balance.negative .amount { color: #dc2626; }
+  &.income .amount {
+    color: #16a34a;
+  }
+  &.expense .amount {
+    color: #dc2626;
+  }
+  &.balance .amount {
+    color: #6366f1;
+  }
+  &.balance.negative .amount {
+    color: #dc2626;
+  }
 }
 
 .recent {
+  margin-bottom: 2rem;
   background: white;
   border-radius: 8px;
   padding: 1.5rem;
@@ -179,3 +188,12 @@
     }
   }
 }
+
+.chart-container {
+  position: relative;
+  height: 450px;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
