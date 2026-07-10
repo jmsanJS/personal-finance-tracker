@@ -19,6 +19,12 @@ export interface Summary {
   balance: number;
 }
 
+export interface CategorySummary {
+  categoryId: number;
+  categoryName: string;
+  total: number;
+}
+
 @Injectable()
 export class TransactionsService {
   constructor(
@@ -79,6 +85,26 @@ export class TransactionsService {
       totalExpenses,
       balance: totalIncome - totalExpenses,
     };
+  }
+
+  async getCategorySummary(userId: number): Promise<CategorySummary[]> {
+    const rows: { categoryId: number; categoryName: string; total: string }[] =
+      await this.transactionsRepository
+        .createQueryBuilder('t')
+        .leftJoin('t.category', 'c')
+        .select('c.id', 'categoryId')
+        .addSelect('c.name', 'categoryName')
+        .addSelect('SUM(t.amount)', 'total')
+        .where('t.userId = :userId', { userId })
+        .andWhere('t.type = :type', { type: 'expense' })
+        .groupBy('c.id')
+        .getRawMany();
+
+    return rows.map((r) => ({
+      categoryId: r.categoryId,
+      categoryName: r.categoryName,
+      total: parseFloat(r.total),
+    }));
   }
 
   async create(

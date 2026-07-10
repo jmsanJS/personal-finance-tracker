@@ -37,6 +37,12 @@ export class TransactionsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('summary/by-category')
+  getCategorySummary(@Request() req: { user: { sub: number } }) {
+    return this.transactionsService.getCategorySummary(req.user.sub);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(
     @Body() dto: CreateTransactionDto,
