@@ -16,6 +16,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { FindTransactionsDto } from './dto/find-transactions.dto';
+import { MonthlyTrendsDto } from './dto/monthly-trends.dto';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -40,6 +41,18 @@ export class TransactionsController {
   @Get('summary/by-category')
   getCategorySummary(@Request() req: { user: { sub: number } }) {
     return this.transactionsService.getCategorySummary(req.user.sub);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('summary/monthly-trends')
+  getMonthlyTrends(
+    @Query() query: MonthlyTrendsDto,
+    @Request() req: { user: { sub: number } },
+  ) {
+    return this.transactionsService.getMonthlyTrends(
+      req.user.sub,
+      query.months ?? 6,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

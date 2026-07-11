@@ -25,6 +25,12 @@ export interface CategorySummary {
   total: number;
 }
 
+export interface MonthlyTrend {
+  month: string;
+  income: number;
+  expenses: number;
+}
+
 @Injectable()
 export class TransactionsService {
   constructor(
@@ -105,6 +111,52 @@ export class TransactionsService {
       categoryName: r.categoryName,
       total: parseFloat(r.total),
     }));
+  }
+
+  async getMonthlyTrends(
+    userId: number,
+    months: number,
+  ): Promise<MonthlyTrend[]> {
+    const from = new Date();
+    from.setMonth(from.getMonth() - months);
+
+    const rows: { month: string; type: 'expense' | 'income'; total: string }[] =
+      await this.transactionsRepository
+        .createQueryBuilder('t')
+        .select("to_char(t.date, 'YYYY-MM')", 'month')
+        .addSelect('t.type', 'type')
+        .addSelect('SUM(t.amount)', 'total')
+        .where('t.userId = :userId', { userId })
+        .andWhere('t.date >= :from', { from })
+        .groupBy('month')
+        .addGroupBy('type')
+        .orderBy('month', 'ASC')
+        .getRawMany();
+
+    const trendMap = new Map<string, MonthlyTrend>();
+
+    for (const r of rows) {
+      if (!trendMap.has(r.month)) {
+        trendMap.set(r.month, { month: r.month, income: 0, expenses: 0 });
+      }
+      const entry = trendMap.get(r.month)!;
+      if (r.type === 'income') {
+        entry.income = parseFloat(r.total);
+      } else {
+        entry.expenses = parseFloat(r.total);
+      }
+    }
+
+    const result: MonthlyTrend[] = [];
+    const now = new Date();
+    for (let i = months - 1; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+
+      const entry = trendMap.get(key) ?? { month: key, income: 0, expenses: 0 };
+      result.push(entry);
+    }
+    return result;
   }
 
   async create(
