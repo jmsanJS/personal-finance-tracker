@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import {
@@ -17,16 +17,14 @@ import { BaseChartDirective } from 'ng2-charts';
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
+  authService = inject(AuthService);
+  private transactionService = inject(TransactionService);
+  private router = inject(Router);
+
   transactions = signal<Transaction[]>([]);
   total = signal(0);
   summary = signal<Summary | null>(null);
   categorySummary = signal<CategorySummary[]>([]);
-
-  constructor(
-    public authService: AuthService,
-    private transactionService: TransactionService,
-    private router: Router,
-  ) {}
 
   ngOnInit() {
     this.transactionService.getAll().subscribe({
@@ -74,7 +72,6 @@ export class Dashboard implements OnInit {
 
   pieChartOptions = {
     responsive: true,
-
   };
 
   logout() {

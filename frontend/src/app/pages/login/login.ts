@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -10,6 +10,9 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './login.scss',
 })
 export class Login {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(10)]),
@@ -17,8 +20,6 @@ export class Login {
 
   error = '';
   loading = false;
-
-  constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
     if (this.form.invalid) return;

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Transaction, TransactionService } from '../../core/services/transaction';
 import { Category, CategoryService } from '../../core/services/category';
@@ -13,6 +13,11 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
   styleUrl: './transactions.scss',
 })
 export class Transactions implements OnInit {
+  private transactionService = inject(TransactionService);
+  private categoryService = inject(CategoryService);
+  authService = inject(AuthService);
+  private router = inject(Router);
+
   transactions = signal<Transaction[]>([]);
   total = signal(0);
   categories = signal<Category[]>([]);
@@ -37,13 +42,6 @@ export class Transactions implements OnInit {
     type: new FormControl<'income' | 'expense'>('expense', Validators.required),
     categoryId: new FormControl('', Validators.required),
   });
-
-  constructor(
-    private transactionService: TransactionService,
-    private categoryService: CategoryService,
-    public authService: AuthService,
-    private router: Router,
-  ) {}
 
   ngOnInit() {
     this.loadTransactions();

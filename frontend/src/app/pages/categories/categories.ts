@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Category, CategoryService } from '../../core/services/category';
 import { AuthService } from '../../core/services/auth.service';
@@ -11,6 +11,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './categories.scss',
 })
 export class Categories implements OnInit {
+  authService = inject(AuthService);
+  private categoryService = inject(CategoryService);
+  private router = inject(Router);
+
   categories = signal<Category[]>([]);
   showForm = false;
   loading = signal(true);
@@ -22,12 +26,6 @@ export class Categories implements OnInit {
     type: new FormControl<'income' | 'expense'>('expense', Validators.required),
     color: new FormControl('#6366f1', Validators.required),
   });
-
-  constructor(
-    public authService: AuthService,
-    private categoryService: CategoryService,
-    private router: Router,
-  ) {}
 
   ngOnInit(): void {
     this.categoryService.getAll().subscribe({
@@ -47,7 +45,7 @@ export class Categories implements OnInit {
 
   onDelete(category: Category) {
     this.categoryService.delete(category.id).subscribe({
-      next: () => this.categories.set(this.categories().filter(c => c.id !== category.id)),
+      next: () => this.categories.set(this.categories().filter((c) => c.id !== category.id)),
       error: () => this.error.set('Failed to delete category'),
     });
   }
@@ -61,13 +59,15 @@ export class Categories implements OnInit {
     const editing = this.editingCategory();
 
     if (editing) {
-      this.categoryService.update(editing.id, { name: name!, type: type!, color: color! }).subscribe({
-        next: (updated) => {
-          this.categories.set(this.categories().map(c => c.id === updated.id ? updated : c));
-          this.resetForm();
-        },
-        error: () => this.error.set('Failed to update category'),
-      });
+      this.categoryService
+        .update(editing.id, { name: name!, type: type!, color: color! })
+        .subscribe({
+          next: (updated) => {
+            this.categories.set(this.categories().map((c) => (c.id === updated.id ? updated : c)));
+            this.resetForm();
+          },
+          error: () => this.error.set('Failed to update category'),
+        });
     } else {
       this.categoryService.create({ name: name!, type: type!, color: color! }).subscribe({
         next: (c) => {

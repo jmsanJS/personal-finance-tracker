@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -10,6 +10,9 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './register.scss',
 })
 export class Register {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -19,8 +22,6 @@ export class Register {
   error = '';
   loading = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
-
   onSubmit() {
     if (this.form.invalid) return;
 
@@ -29,14 +30,12 @@ export class Register {
 
     const { name, email, password } = this.form.value;
 
-    this.authService
-      .register({ name: name!, email: email!, password: password! })
-      .subscribe({
-        next: () => this.router.navigate(['/login']),
-        error: (err) => {
-          this.error = err.status === 409 ? 'Email already in use' : 'Registration failed';
-          this.loading = false;
-        },
-      });
+    this.authService.register({ name: name!, email: email!, password: password! }).subscribe({
+      next: () => this.router.navigate(['/login']),
+      error: (err) => {
+        this.error = err.status === 409 ? 'Email already in use' : 'Registration failed';
+        this.loading = false;
+      },
+    });
   }
 }

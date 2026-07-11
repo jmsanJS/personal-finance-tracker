@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 export interface Transaction {
@@ -34,9 +34,9 @@ export interface CategorySummary {
 
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
-  private apiUrl = `${environment.apiUrl}/transactions`;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  private apiUrl = `${environment.apiUrl}/transactions`;
 
   getAll(filters?: {
     type?: string;
@@ -66,7 +66,7 @@ export class TransactionService {
   }
 
   getCategorySummary() {
-    return this.http.get<CategorySummary[]>(`${this.apiUrl}/summary/by-category`)
+    return this.http.get<CategorySummary[]>(`${this.apiUrl}/summary/by-category`);
   }
 
   create(data: CreateTransactionDto) {

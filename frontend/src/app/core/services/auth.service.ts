@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
@@ -10,11 +10,13 @@ interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private http = inject(HttpClient);
+
   private apiUrl = environment.apiUrl;
 
   currentUser = signal<AuthResponse['user'] | null>(null);
 
-  constructor(private http: HttpClient) {
+  constructor() {
     const stored = localStorage.getItem('current_user');
     if (stored) this.currentUser.set(JSON.parse(stored));
   }
