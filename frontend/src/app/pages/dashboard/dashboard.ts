@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import {
   CategorySummary,
+  MonthlyTrend,
   Summary,
   Transaction,
   TransactionService,
@@ -25,6 +26,8 @@ export class Dashboard implements OnInit {
   total = signal(0);
   summary = signal<Summary | null>(null);
   categorySummary = signal<CategorySummary[]>([]);
+  monthlyTrends = signal<MonthlyTrend[]>([]);
+  trendMonths = signal(6);
 
   ngOnInit() {
     this.transactionService.getAll().subscribe({
@@ -36,6 +39,7 @@ export class Dashboard implements OnInit {
     this.transactionService.getCategorySummary().subscribe({
       next: (response) => this.categorySummary.set(response),
     });
+    this.loadMonthlyTrends();
   }
 
   get totalIncome(): number {
@@ -72,6 +76,34 @@ export class Dashboard implements OnInit {
 
   pieChartOptions = {
     responsive: true,
+  };
+
+  loadMonthlyTrends() {
+    this.transactionService.getMonthlyTrends(this.trendMonths()).subscribe({
+      next: (response) => this.monthlyTrends.set(response),
+    });
+  }
+
+  onSelectMonthlyTrendChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.trendMonths.set(Number(value));
+    this.loadMonthlyTrends();
+  }
+
+  get lineChartData() {
+    const data = this.monthlyTrends();
+    return {
+      labels: data.map((d) => d.month),
+      datasets: [
+        { data: data.map((d) => d.income), label: 'Income' },
+        { data: data.map((d) => d.expenses), label: 'Expenses' },
+      ],
+    };
+  }
+
+  lineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
   };
 
   logout() {

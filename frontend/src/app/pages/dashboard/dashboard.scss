@@ -197,3 +197,30 @@
   margin: 0 auto;
 }
 
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .monthly-trends-range {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+    margin-bottom: 0;
+
+    select {
+      padding: 0.625rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 1rem;
+      outline: none;
+      background: white;
+    }
+  }
+}
+.chart-container--wide {
+  max-width: 100%;
+  height: 350px;
+}

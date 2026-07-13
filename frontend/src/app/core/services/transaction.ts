@@ -32,6 +32,12 @@ export interface CategorySummary {
   total: number;
 }
 
+export interface MonthlyTrend {
+  month: string;
+  income: number;
+  expenses: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
   private http = inject(HttpClient);
@@ -67,6 +73,11 @@ export class TransactionService {
 
   getCategorySummary() {
     return this.http.get<CategorySummary[]>(`${this.apiUrl}/summary/by-category`);
+  }
+
+  getMonthlyTrends(months: number) {
+    const params = new HttpParams().set('months', months);
+    return this.http.get<MonthlyTrend[]>(`${this.apiUrl}/summary/monthly-trends`, { params });
   }
 
   create(data: CreateTransactionDto) {

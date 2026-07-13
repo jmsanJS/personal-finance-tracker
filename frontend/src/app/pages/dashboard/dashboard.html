@@ -55,5 +55,30 @@
     <section class="chart-container">
       <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="'pie'"></canvas>
     </section>
+
+    <div class="chart-header">
+      <h2>Monthly Trends</h2>
+      <div class="monthly-trends-range">
+        <label for="months-select">Range:</label>
+        <select
+          id="months-select"
+          (change)="onSelectMonthlyTrendChange($event)"
+          [value]="trendMonths()"
+        >
+          <option value="3">3 months</option>
+          <option value="6">6 months</option>
+          <option value="12">12 months</option>
+        </select>
+      </div>
+    </div>
+
+    <section class="chart-container chart-container--wide">
+      <canvas
+        baseChart
+        [data]="lineChartData"
+        [options]="lineChartOptions"
+        [type]="'line'"
+      ></canvas>
+    </section>
   </main>
 </div>
