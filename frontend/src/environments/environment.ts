@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3000',
+  apiUrl: 'https://personal-finance-tracker-production-fe39.up.railway.app',
 };
