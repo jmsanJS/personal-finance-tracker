@@ -16,12 +16,12 @@
         <app-field-error [control]="form.get('password')" label="Password" />
       </div>
 
-      @if (error) {
-        <p class="error-banner">{{ error }}</p>
+      @if (error()) {
+        <p class="error-banner">{{ error() }}</p>
       }
 
-      <button type="submit" [disabled]="loading">
-        {{ loading ? 'Signing in...' : 'Sign in' }}
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Signing in...' : 'Sign in' }}
       </button>
     </form>
 

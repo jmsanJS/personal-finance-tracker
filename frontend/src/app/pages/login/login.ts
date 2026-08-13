@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthError, AuthService } from '../../core/services/auth.service';
@@ -19,22 +19,22 @@ export class Login {
     password: new FormControl('', [Validators.required]),
   });
 
-  error = '';
-  loading = false;
+  error = signal('');
+  loading = signal(false);
 
   onSubmit() {
     if (this.form.invalid) return;
 
-    this.loading = true;
-    this.error = '';
+    this.loading.set(true);
+    this.error.set('');
 
     const { email, password } = this.form.value;
 
     this.authService.login({ email: email!, password: password! }).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: (err: AuthError) => {
-        this.error = err.message;
-        this.loading = false;
+        this.error.set(err.message);
+        this.loading.set(false);
       },
     });
   }

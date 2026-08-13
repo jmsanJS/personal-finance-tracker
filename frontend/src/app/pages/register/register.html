@@ -28,12 +28,12 @@
         <app-field-error [control]="form.get('confirmPassword')" label="Confirm your password" />
       </div>
 
-      @if (error) {
-        <p class="error-banner">{{ error }}</p>
+      @if (error()) {
+        <p class="error-banner">{{ error() }}</p>
       }
 
-      <button type="submit" [disabled]="loading">
-        {{ loading ? 'Creating account...' : 'Create account' }}
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Creating account...' : 'Create account' }}
       </button>
     </form>
 
