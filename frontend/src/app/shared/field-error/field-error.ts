@@ -5,6 +5,7 @@ import { AbstractControl } from '@angular/forms';
   selector: 'app-field-error',
   imports: [],
   templateUrl: './field-error.html',
+  styleUrl: './field-error.scss',
 })
 export class FieldError {
   control = input.required<AbstractControl | null>();
