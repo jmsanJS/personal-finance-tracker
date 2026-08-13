@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthError, AuthService } from '../../core/services/auth.service';
+import { FieldError } from '../../shared/field-error/field-error';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, FieldError],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -15,7 +16,7 @@ export class Login {
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(10)]),
+    password: new FormControl('', [Validators.required]),
   });
 
   error = '';
@@ -31,8 +32,8 @@ export class Login {
 
     this.authService.login({ email: email!, password: password! }).subscribe({
       next: () => this.router.navigate(['/dashboard']),
-      error: () => {
-        this.error = 'Invalid email or password';
+      error: (err: AuthError) => {
+        this.error = err.message;
         this.loading = false;
       },
     });

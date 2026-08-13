@@ -7,17 +7,13 @@
       <div class="field">
         <label for="email">Email</label>
         <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
-        @if (form.get('email')?.invalid && form.get('email')?.touched) {
-          <span class="error">Valid email is required</span>
-        }
+        <app-field-error [control]="form.get('email')" label="Email" />
       </div>
 
       <div class="field">
         <label for="password">Password</label>
         <input id="password" type="password" formControlName="password" placeholder="••••••" />
-        @if (form.get('password')?.invalid && form.get('password')?.touched) {
-          <span class="error">Password must be at least 10 characters</span>
-        }
+        <app-field-error [control]="form.get('password')" label="Password" />
       </div>
 
       @if (error) {
