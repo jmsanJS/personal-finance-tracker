@@ -4,20 +4,20 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('categories')
 export class Category {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ type: 'enum', enum: ['income', 'expense'] })
-  type: string;
+  type!: string;
 
   @Column()
-  color: string;
+  color!: string;
 
   @ManyToOne(() => User)
-  user: User;
+  user!: User;
 
   @Column({ nullable: true })
-  userId: number;
+  userId!: number;
 }

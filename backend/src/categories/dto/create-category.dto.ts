@@ -2,11 +2,11 @@ import { IsIn, IsString } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsString()
-  name: string;
+  name!: string;
 
   @IsIn(['income', 'expense'])
-  type: string;
+  type!: string;
 
   @IsString()
-  color: string;
+  color!: string;
 }

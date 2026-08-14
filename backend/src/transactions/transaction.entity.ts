@@ -11,7 +11,7 @@ import {
 @Entity('transactions')
 export class Transaction {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({
     type: 'decimal',
@@ -22,29 +22,29 @@ export class Transaction {
       from: (v: string) => parseFloat(v),
     },
   })
-  amount: number;
+  amount!: number;
 
   @Column({ nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'date' })
-  date: string;
+  date!: string;
 
   @Column({ type: 'enum', enum: ['income', 'expense'] })
-  type: string;
+  type!: string;
 
   @ManyToOne(() => Category)
-  category: Category;
+  category!: Category;
 
   @Column()
-  categoryId: number;
+  categoryId!: number;
 
   @ManyToOne(() => User)
-  user: User;
+  user!: User;
 
   @Column()
-  userId: number;
+  userId!: number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }
