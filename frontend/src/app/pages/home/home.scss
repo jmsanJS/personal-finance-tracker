@@ -1,0 +1,119 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 3rem;
+  background: var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary-light);
+  text-decoration: none;
+}
+
+.navbar ul {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  list-style: none;
+  font-size: var(--font-size-base);
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li a {
+  text-decoration: none;
+  color: var(--color-text);
+  letter-spacing: 0.4px;
+}
+
+.navbar li a.btn-primary {
+  background: var(--color-primary-light);
+  color: var(--color-surface);
+  padding: 0.65rem 1.45rem;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.navbar ul.links li a {
+  position: relative;
+}
+
+.navbar ul.links li a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 150ms ease;
+}
+
+.navbar ul.links li a:hover::after {
+  transform: scaleX(1);
+}
+
+.navbar ul li a.btn-primary:hover {
+  background: var(--color-primary);
+}
+
+#features,
+#pricing,
+#reviews {
+  scroll-margin-top: 5rem;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 6rem 2rem;
+  background: var((--color-bg));
+}
+
+.hero h1 {
+  font-size: var(--font-size-hero);
+  color: var(--color-text);
+  margin: 0;
+  max-width: 20ch;
+  text-align: center;
+}
+
+.hero p {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  max-width: 42ch;
+  text-align: center;
+  margin: 0;
+}
+
+.btn-hero {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+  color: var(--color-surface);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  padding: 1.1rem 2.5rem;
+  border-radius: 14px;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(27, 67, 50, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-hero:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(27, 67, 50, 0.35);
+}
