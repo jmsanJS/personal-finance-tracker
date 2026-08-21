@@ -24,7 +24,18 @@
   <a routerLink="/register" class="btn-hero">Get Started</a>
 </section>
 
-<section id="features" class="home-section"></section>
+<section id="features" class="home-section">
+  <h2>Track your spendings and savings</h2>
+  <div class="cards-grid">
+    @for (feature of features; track feature.title) {
+      <div class="feature-card">
+        <span class="material-icons">{{ feature.icon }}</span>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+    }
+  </div>
+</section>
 
 <section id="pricing" class="home-section"></section>
 
