@@ -3,18 +3,22 @@
     <span class="material-icons">track_changes</span>
     FinTrack
   </a>
-  <ul class="links">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#reviews">Reviews</a></li>
-  </ul>
-  <ul>
-    <li><a routerLink="/login">Log In</a></li>
-    <li>
-      <a routerLink="/register" class="btn-primary"><span>Register</span></a>
-    </li>
-  </ul>
+  <div class="nav-menu" [class.open]="isOpen()">
+    <ul class="links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+    </ul>
+    <ul>
+      <li><a routerLink="/login">Log In</a></li>
+      <li><a routerLink="/register" class="btn-primary"><span>Register</span></a></li>
+    </ul>
+  </div>
+  <button class="menu-toggle" (click)="onClick()" aria-label="Toggle menu">
+    <span class="material-icons">menu</span>
+  </button>
 </nav>
+
 
 <section class="hero">
   <h1>Know where your money goes.</h1>
@@ -78,4 +82,20 @@
   </div>
 </section>
 
-<footer></footer>
+<footer>
+  <div class="footer-top">
+    <a routerLink="/" class="footer-logo">
+      <span class="material-icons">track_changes</span>
+      FinTrack
+    </a>
+    <nav class="">
+      <ul class="">
+        <li><a href="#">Overview</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+      </ul>
+    </nav>
+  </div>
+  <p class="copyright">© {{ currentYear }} FinTrack. All rights reserved.</p>
+</footer>

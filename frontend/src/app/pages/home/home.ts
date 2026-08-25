@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 interface Feature {
@@ -117,4 +117,15 @@ export class Home {
       role: 'Grad Student',
     },
   ];
+
+  currentYear = new Date().getFullYear();
+  isOpen = signal(false)
+
+  onClick(): void {
+    this.isOpen.set(!this.isOpen());
+    if (this.isOpen()) {
+      console.log('OPEN');
+    }
+  }
+  
 }

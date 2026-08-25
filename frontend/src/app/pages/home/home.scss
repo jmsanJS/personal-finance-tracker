@@ -3,7 +3,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 3rem;
-  background: var(--color-border);
+  background: rgba(var(--color-bg-rgb), 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -17,6 +19,10 @@
   font-weight: 700;
   color: var(--color-primary-light);
   text-decoration: none;
+}
+
+.nav-menu {
+  display: contents; // It ignores this tag (not its children) for layout purposes
 }
 
 .navbar ul {
@@ -74,6 +80,47 @@
   transform: scaleX(1);
 }
 
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.menu-toggle .material-icons {
+  font-size: 2rem;
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+
+  .nav-menu.open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 2rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav-menu.open ul {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
 .navbar ul li a.btn-primary:hover {
   background: var(--color-primary);
 }
@@ -120,7 +167,9 @@
   border-radius: 14px;
   text-decoration: none;
   box-shadow: 0 8px 20px rgba(27, 67, 50, 0.25);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .btn-hero:hover {
@@ -263,4 +312,57 @@
 .review-card .author {
   font-weight: 700;
   color: var(--color-text);
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 3rem;
+  background: var(--color-text);
+}
+
+.footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.copyright {
+  margin: 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba($color: #fff, $alpha: 0.2);
+  font-size: 0.9rem;
+  color: var(--color-surface);
+  opacity: 0.6;
+  text-align: center;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-surface);
+  text-decoration: none;
+}
+
+footer ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+footer a {
+  color: var(--color-surface);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+footer a:hover {
+  opacity: 1;
 }
