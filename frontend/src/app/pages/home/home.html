@@ -60,6 +60,22 @@
   </div>
 </section>
 
-<section id="reviews" class="home-section"></section>
+<section id="reviews" class="home-section">
+  <h2>Users love FinTrack</h2>
+  <div class="cards-grid">
+    @for (review of reviews; track review.id) {
+      <div class="review-card">
+        <span class="stars">{{ review.stars }}</span>
+        <p class="quote">{{ review.quote }}</p>
+        <p class="reviewer">
+          <span class="author">{{ review.author }}</span>
+          @if (review.role) {
+            - <span>{{ review.role }}</span>
+          }
+        </p>
+      </div>
+    }
+  </div>
+</section>
 
 <footer></footer>

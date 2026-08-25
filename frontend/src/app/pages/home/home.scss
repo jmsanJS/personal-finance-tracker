@@ -232,3 +232,35 @@
 .pricing-tier-card a.btn-primary {
   font-size: var(--font-size-base);
 }
+
+.review-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: left;
+}
+
+.review-card .stars {
+  color: var(--color-primary);
+  letter-spacing: 2px;
+}
+
+.review-card .quote {
+  font-style: italic;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.review-card .reviewer {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.review-card .author {
+  font-weight: 700;
+  color: var(--color-text);
+}
