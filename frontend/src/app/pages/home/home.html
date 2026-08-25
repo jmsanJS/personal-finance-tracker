@@ -37,7 +37,28 @@
   </div>
 </section>
 
-<section id="pricing" class="home-section"></section>
+<section id="pricing" class="home-section">
+  <h2>Considered pricing</h2>
+  <div class="cards-grid">
+    @for (tier of pricingTiers; track tier.name) {
+      <div class="pricing-tier-card" [class.highlighted]="tier.highlighted">
+        <h3 class="pricing-title">{{ tier.name }}</h3>
+        <p class="price">
+          {{ tier.price | currency }}
+          @if (tier.price > 0) {
+            <span>{{ tier.period }}</span>
+          }
+        </p>
+        <ul>
+          @for (item of tier.features; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+        <a routerLink="/register" class="btn-primary"> {{ tier.ctaLabel }}</a>
+      </div>
+    }
+  </div>
+</section>
 
 <section id="reviews" class="home-section"></section>
 
