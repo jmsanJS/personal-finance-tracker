@@ -119,13 +119,9 @@ export class Home {
   ];
 
   currentYear = new Date().getFullYear();
-  isOpen = signal(false)
+  isOpen = signal(false);
 
-  onClick(): void {
+  toggleMenu(): void {
     this.isOpen.set(!this.isOpen());
-    if (this.isOpen()) {
-      console.log('OPEN');
-    }
   }
-  
 }

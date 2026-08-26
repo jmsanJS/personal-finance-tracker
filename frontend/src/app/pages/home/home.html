@@ -14,8 +14,12 @@
       <li><a routerLink="/register" class="btn-primary"><span>Register</span></a></li>
     </ul>
   </div>
-  <button class="menu-toggle" (click)="onClick()" aria-label="Toggle menu">
-    <span class="material-icons">menu</span>
+  <button class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
+    @if (isOpen()) {
+      <span class="material-icons">close</span>
+    } @else {
+      <span class="material-icons">menu</span>
+    }
   </button>
 </nav>
 
