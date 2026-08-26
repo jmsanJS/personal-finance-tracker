@@ -1,19 +1,16 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 import { Category, CategoryService } from '../../core/services/category';
-import { AuthService } from '../../core/services/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Navbar } from "../../shared/navbar/navbar";
 
 @Component({
   selector: 'app-categories',
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Navbar],
   templateUrl: './categories.html',
   styleUrl: './categories.scss',
 })
 export class Categories implements OnInit {
-  authService = inject(AuthService);
   private categoryService = inject(CategoryService);
-  private router = inject(Router);
 
   categories = signal<Category[]>([]);
   showForm = false;
@@ -83,10 +80,5 @@ export class Categories implements OnInit {
     this.form.reset({ type: 'expense', color: '#6366f1' });
     this.editingCategory.set(null);
     this.showForm = false;
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
   }
 }

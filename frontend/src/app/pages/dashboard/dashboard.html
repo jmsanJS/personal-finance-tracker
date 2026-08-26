@@ -1,13 +1,5 @@
 <div class="layout">
-  <nav class="navbar">
-    <span class="brand">Finance Tracker</span>
-    <div class="nav-links">
-      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-      <a routerLink="/transactions" routerLinkActive="active">Transactions</a>
-      <a routerLink="/categories" routerLinkActive="active">Categories</a>
-    </div>
-    <button class="logout" (click)="logout()">Logout</button>
-  </nav>
+  <app-navbar />
 
   <main class="main">
     <h1>Welcome, {{ authService.currentUser()?.name }}</h1>

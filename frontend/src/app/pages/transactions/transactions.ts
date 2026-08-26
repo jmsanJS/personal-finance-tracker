@@ -2,21 +2,18 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Transaction, TransactionService } from '../../core/services/transaction';
 import { Category, CategoryService } from '../../core/services/category';
-import { AuthService } from '../../core/services/auth.service';
-import { Router, RouterLink } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-transactions',
-  imports: [ReactiveFormsModule, CurrencyPipe, DatePipe, RouterLink],
+  imports: [ReactiveFormsModule, CurrencyPipe, DatePipe, Navbar],
   templateUrl: './transactions.html',
   styleUrl: './transactions.scss',
 })
 export class Transactions implements OnInit {
   private transactionService = inject(TransactionService);
   private categoryService = inject(CategoryService);
-  authService = inject(AuthService);
-  private router = inject(Router);
 
   transactions = signal<Transaction[]>([]);
   total = signal(0);
@@ -221,10 +218,5 @@ export class Transactions implements OnInit {
     this.form.reset({ type: 'expense' });
     this.editingTransaction.set(null);
     this.showForm = false;
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
   }
 }

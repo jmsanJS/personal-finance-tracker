@@ -1,6 +1,6 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnInit, signal, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import {
   CategorySummary,
@@ -10,17 +10,17 @@ import {
   TransactionService,
 } from '../../core/services/transaction';
 import { BaseChartDirective } from 'ng2-charts';
+import { Navbar } from "../../shared/navbar/navbar";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CurrencyPipe, DatePipe, RouterLink, BaseChartDirective],
+  imports: [CurrencyPipe, DatePipe, RouterLink, BaseChartDirective, Navbar],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
   authService = inject(AuthService);
   private transactionService = inject(TransactionService);
-  private router = inject(Router);
 
   transactions = signal<Transaction[]>([]);
   total = signal(0);
@@ -105,9 +105,4 @@ export class Dashboard implements OnInit {
     responsive: true,
     maintainAspectRatio: false,
   };
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
 }

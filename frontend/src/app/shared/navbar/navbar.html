@@ -1,0 +1,22 @@
+<nav class="navbar">
+  <a routerLink="/dashboard" class="logo"
+    ><span class="material-icons">track_changes</span>FinTrack
+  </a>
+  <div class="nav-menu" [class.open]="isOpen()">
+    <ul class="links">
+      <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+      <li><a routerLink="/transactions" routerLinkActive="active">Transactions</a></li>
+      <li><a routerLink="/categories" routerLinkActive="active">Categories</a></li>
+    </ul>
+    <div>
+      <button class="logout" (click)="logout()">Logout</button>
+    </div>
+  </div>
+  <button class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle menu">
+    @if (isOpen()) {
+      <span class="material-icons">close</span>
+    } @else {
+      <span class="material-icons">menu</span>
+    }
+  </button>
+</nav>
