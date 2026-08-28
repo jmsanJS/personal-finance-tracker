@@ -39,7 +39,7 @@
     margin-bottom: 1rem;
 
     label {
-      font-size: 0.875rem;
+      font-size: var(--font-size-sm);
       font-weight: 500;
       color: var(--color-text-muted);
     }
@@ -48,7 +48,7 @@
       padding: 0.625rem 0.75rem;
       border: 1px solid var(--color-border);
       border-radius: 6px;
-      font-size: 1rem;
+      font-size: var(--font-size-sm);
       outline: none;
       transition: border-color 0.2s;
 
@@ -99,11 +99,10 @@
   }
 
   .btn-secondary {
-    background: var(--color-surface);
+    background: transparent;
     color: var(--color-text-muted);
-    border: 1px solid var(--color-border);
-    padding: 0.6rem 1.25rem;
-    border-radius: 6px;
+    border: none;
+    padding: 0.6rem;
     font-size: var(--font-size-sm);
     font-weight: 500;
     cursor: pointer;
@@ -114,10 +113,15 @@
     }
   }
 
+  .transaction-table {
+    overflow-x: auto;
+  }
+
   .transaction-header {
     display: flex;
     align-items: center;
     padding: 0.5rem 0;
+    min-width: 600px;
     border-bottom: 2px solid var(--color-border);
     font-size: 0.75rem;
     font-weight: 600;
@@ -131,6 +135,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 0;
+    min-width: 600px;
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -139,6 +144,7 @@
     align-items: center;
     gap: 1rem;
     margin-top: 1.5rem;
+    flex-wrap: wrap;
 
     .pagination-status {
       font-size: 0.875rem;
@@ -155,6 +161,10 @@
 
       label {
         margin: 0;
+      }
+
+      select {
+        font-size: var(--font-size-sm);
       }
     }
   }
@@ -173,7 +183,7 @@
   }
 
   .col-date {
-    width: 15%;
+    width: 20%;
   }
   .col-desc {
     width: 35%;
@@ -207,7 +217,7 @@
     justify-content: center;
 
     .material-icons {
-      font-size: 1.1rem;
+      font-size: var(--font-size-sm);
     }
   }
 

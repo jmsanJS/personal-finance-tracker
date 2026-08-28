@@ -93,6 +93,10 @@
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+  }
+
   .nav-menu {
     display: none;
   }
@@ -188,6 +192,25 @@
   font-size: var(--font-size-xl);
   color: var(--color-text);
   margin: 0 0 3rem;
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: clamp(3.2rem, 10vw, var(--font-size-hero));
+  }
+
+  .hero p {
+    font-size: clamp(var(--font-size-md), 4vw, var(--font-size-lg));
+  }
+
+  .btn-hero {
+    padding: 0.8rem 1.6rem;
+    font-size: clamp(var(--font-size-md), 4vw, var(--font-size-lg));
+  }
+
+  .home-section h2 {
+    font-size: clamp(2.2rem, 6vw, var(--font-size-xl));
+  }
 }
 
 .cards-grid {
@@ -365,4 +388,21 @@ footer a {
 
 footer a:hover {
   opacity: 1;
+}
+
+@media (max-width: 768px) {
+  footer {
+    padding: 2rem;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  footer ul {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }

@@ -132,6 +132,12 @@
       justify-content: flex-end;
       gap: 0.5rem;
     }
+
+    @media (max-width: 600px) {
+      .category-actions {
+        gap: 0.1rem;
+      }
+    }
   }
 
   .btn-edit,
@@ -146,7 +152,7 @@
     justify-content: center;
 
     .material-icons {
-      font-size: 1.1rem;
+      font-size: var(--font-size-sm);
     }
   }
 
