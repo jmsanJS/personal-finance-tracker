@@ -30,6 +30,16 @@ export class Register {
 
   error = signal('');
   loading = signal(false);
+  type = signal('password');
+  confirmType = signal('password');
+
+  passwordVisible() {
+    this.type.set(this.type() === 'password' ? 'text' : 'password');
+  }
+
+  confirmVisible() {
+    this.confirmType.set(this.confirmType() === 'password' ? 'text' : 'password');
+  }
 
   onSubmit() {
     if (this.form.invalid) return;

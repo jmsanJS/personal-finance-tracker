@@ -1,7 +1,14 @@
 <div class="auth-container">
   <div class="auth-card">
-    <h1>Finance Tracker</h1>
-    <h2>Sign in</h2>
+    <header>
+      <h1>
+        <a routerLink="/" class="logo">
+          <span class="material-icons">track_changes</span>
+          FinTrack
+        </a>
+      </h1>
+      <h2>Sign in</h2>
+    </header>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="field">
@@ -12,7 +19,22 @@
 
       <div class="field">
         <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" placeholder="••••••" />
+        <div class="input-container">
+          <input
+            id="password"
+            [type]="type()"
+            formControlName="password"
+            placeholder="••••••••••"
+          />
+          <button
+            class="material-icons"
+            type="button"
+            (click)="passwordVisible()"
+            aria-label="Toggle password visibility"
+          >
+            {{ type() === 'password' ? 'visibility' : 'visibility_off' }}
+          </button>
+        </div>
         <app-field-error [control]="form.get('password')" label="Password" />
       </div>
 
@@ -20,7 +42,7 @@
         <p class="error-banner">{{ error() }}</p>
       }
 
-      <button type="submit" [disabled]="loading()">
+      <button class="btn" type="submit" [disabled]="loading()">
         {{ loading() ? 'Signing in...' : 'Sign in' }}
       </button>
     </form>

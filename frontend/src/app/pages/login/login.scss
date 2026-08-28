@@ -14,16 +14,34 @@
   width: 100%;
   max-width: 400px;
 
-  h1 {
-    font-size: 1.25rem;
-    color: var(--color-primary-light);
-    margin: 0 0 0.25rem;
-  }
+  header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 
-  h2 {
-    font-size: 1.5rem;
-    margin: 0 0 1.5rem;
-    color: var(--color-text);
+    h1 {
+      color: var(--color-primary-light);
+      margin: 0 0 0.25rem;
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: var(--font-size-lg);
+        font-weight: 700;
+        color: var(--color-primary-light);
+        text-decoration: none;
+      }
+    }
+
+    h2 {
+      font-size: var(--font-size-md);
+      margin: 0 0 1.5rem;
+      color: var(--color-text);
+      text-transform: uppercase;
+    }
   }
 }
 
@@ -53,6 +71,26 @@
   }
 }
 
+.input-container {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding-right: 2.5rem;
+  }
+
+  .material-icons {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: var(--font-size-base);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+}
+
 .error {
   font-size: 0.75rem;
   color: #ef4444;
@@ -68,7 +106,7 @@
   margin-bottom: 1rem;
 }
 
-button {
+.btn {
   width: 100%;
   padding: 0.75rem;
   background: var(--color-primary-light);

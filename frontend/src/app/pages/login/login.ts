@@ -21,6 +21,11 @@ export class Login {
 
   error = signal('');
   loading = signal(false);
+  type = signal('password');
+
+  passwordVisible() {
+    this.type.set(this.type() === 'password' ? 'text' : 'password');
+  }
 
   onSubmit() {
     if (this.form.invalid) return;
