@@ -4,7 +4,7 @@
 }
 
 .main {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 
@@ -15,18 +15,45 @@
   }
 }
 
-.cards {
+h2 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-areas:
+    'income expense balance'
+    'recent pie-chart pie-chart'
+    'recent trend-chart trend-chart';
   gap: 1rem;
   margin-bottom: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+
+  > * {
+    // overrides default min-width: auto so columns can shrink below the chart canvas's intrinsic pixel size
+    min-width: 0;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'income'
+      'expense'
+      'balance'
+      'recent'
+      'pie-chart'
+      'trend-chart';
+  }
 }
 
 .card {
   background: var(--color-surface);
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -44,6 +71,16 @@
     font-weight: 700;
   }
 
+  &.income {
+    grid-area: income;
+  }
+  &.expense {
+    grid-area: expense;
+  }
+  &.balance {
+    grid-area: balance;
+  }
+
   &.income .amount {
     color: #16a34a;
   }
@@ -59,11 +96,11 @@
 }
 
 .recent {
-  margin-bottom: 2rem;
+  grid-area: recent;
   background: var(--color-surface);
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .section-header {
@@ -71,13 +108,6 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
-
-  h2 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--color-text);
-    margin: 0;
-  }
 
   a {
     font-size: 0.875rem;
@@ -103,6 +133,13 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  overflow-y: auto;
+  max-height: 700px;
+
+  @media (max-width: 768px) {
+    max-height: 330px;
+    overflow: hidden;
+  }
 }
 
 .transaction-item {
@@ -143,12 +180,17 @@
   }
 }
 
+.pie-chart {
+  grid-area: pie-chart;
+}
+
+.trend-chart {
+  grid-area: trend-chart;
+}
+
 .chart-container {
   position: relative;
-  height: 450px;
   width: 100%;
-  max-width: 450px;
-  margin: 0 auto;
 }
 
 .chart-header {
@@ -175,6 +217,9 @@
   }
 }
 .chart-container--wide {
-  max-width: 100%;
   height: 350px;
+}
+
+.chart-container--pie {
+  height: 280px;
 }

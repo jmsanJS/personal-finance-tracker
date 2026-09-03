@@ -4,7 +4,7 @@
   <main class="main">
     <h1>Welcome, {{ authService.currentUser()?.name }}</h1>
 
-    <section class="cards">
+    <div class="dashboard-grid">
       <div class="card income">
         <span class="label">Total Income</span>
         <span class="amount">{{ totalIncome | currency }}</span>
@@ -17,60 +17,65 @@
         <span class="label">Balance</span>
         <span class="amount">{{ balance | currency }}</span>
       </div>
-    </section>
 
-    <section class="recent">
-      <div class="section-header">
-        <h2>Recent Transactions</h2>
-        <a routerLink="/transactions">View all</a>
-      </div>
+      <section class="recent">
+        <div class="section-header">
+          <h2>Recent Transactions</h2>
+          <a routerLink="/transactions">View all</a>
+        </div>
 
-      @if (recentTransactions.length === 0) {
-        <p class="empty">No transactions yet. <a routerLink="/transactions">Add one</a></p>
-      } @else {
-        <ul class="transaction-list">
-          @for (t of recentTransactions; track t.id) {
-            <li class="transaction-item">
-              <div class="info">
-                <span class="desc">{{ t.description || 'No description' }}</span>
-                <span class="date">{{ t.date | date: 'mediumDate' }}</span>
-              </div>
-              <span class="tx-amount" [class.expense]="t.type === 'expense'">
-                {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount | currency }}
-              </span>
-            </li>
-          }
-        </ul>
-      }
-    </section>
+        @if (recentTransactions.length === 0) {
+          <p class="empty">No transactions yet. <a routerLink="/transactions">Add one</a></p>
+        } @else {
+          <ul class="transaction-list">
+            @for (t of recentTransactions; track t.id) {
+              <li class="transaction-item">
+                <div class="info">
+                  <span class="desc">{{ t.description || 'No description' }}</span>
+                  <span class="date">{{ t.date | date: 'mediumDate' }}</span>
+                </div>
+                <span class="tx-amount" [class.expense]="t.type === 'expense'">
+                  {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount | currency }}
+                </span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
 
-    <section class="chart-container">
-      <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="'pie'"></canvas>
-    </section>
+      <section class="card pie-chart">
+        <h2>Expenses</h2>
+        <div class="chart-container chart-container--pie">
+          <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="'pie'"></canvas>
+        </div>
+      </section>
 
-    <div class="chart-header">
-      <h2>Monthly Trends</h2>
-      <div class="monthly-trends-range">
-        <label for="months-select">Range:</label>
-        <select
-          id="months-select"
-          (change)="onSelectMonthlyTrendChange($event)"
-          [value]="trendMonths()"
-        >
-          <option value="3">3 months</option>
-          <option value="6">6 months</option>
-          <option value="12">12 months</option>
-        </select>
-      </div>
+      <section class="card trend-chart">
+        <div class="chart-header">
+          <h2>Monthly Trends</h2>
+          <div class="monthly-trends-range">
+            <label for="months-select">Range:</label>
+            <select
+              id="months-select"
+              (change)="onSelectMonthlyTrendChange($event)"
+              [value]="trendMonths()"
+            >
+              <option value="3">3 months</option>
+              <option value="6">6 months</option>
+              <option value="12">12 months</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="chart-container chart-container--wide">
+          <canvas
+            baseChart
+            [data]="lineChartData"
+            [options]="lineChartOptions"
+            [type]="'line'"
+          ></canvas>
+        </div>
+      </section>
     </div>
-
-    <section class="chart-container chart-container--wide">
-      <canvas
-        baseChart
-        [data]="lineChartData"
-        [options]="lineChartOptions"
-        [type]="'line'"
-      ></canvas>
-    </section>
   </main>
 </div>

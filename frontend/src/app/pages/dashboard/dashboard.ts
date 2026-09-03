@@ -10,7 +10,7 @@ import {
   TransactionService,
 } from '../../core/services/transaction';
 import { BaseChartDirective } from 'ng2-charts';
-import { Navbar } from "../../shared/navbar/navbar";
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-dashboard',
@@ -57,25 +57,49 @@ export class Dashboard implements OnInit {
   get recentTransactions(): Transaction[] {
     return [...this.transactions()]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 5);
+      .slice(0, 10);
   }
 
   get pieChartData() {
     const data = this.categorySummary();
     return {
-      labels: data.map((c) => c.categoryName),
+      labels: data.map((c) => c.categoryName).sort((a, b) => a.localeCompare(b)),
       datasets: [
         {
           data: data.map((c) => c.total),
           label: 'Expenses',
         },
       ],
-      hoverOffset: 4,
     };
   }
 
+  private readonly categoricalPalette = [
+    '#2a78d6',
+    '#eb6834',
+    '#1baf7a',
+    '#eda100',
+    '#e87ba4',
+    '#008300',
+    '#4a3aa7',
+    '#e34948',
+  ];
+
   pieChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
+    hoverOffset: 6,
+    backgroundColor: this.categoricalPalette,
+    borderColor: '#faf8f5',
+    borderWidth: 2,
+    plugins: {
+      legend: {
+        position: 'left' as const,
+        labels: { color: '#1a1a1a' },
+      },
+    },
+    animation: {
+      animateRotate: false,
+    },
   };
 
   loadMonthlyTrends() {
@@ -95,8 +119,20 @@ export class Dashboard implements OnInit {
     return {
       labels: data.map((d) => d.month),
       datasets: [
-        { data: data.map((d) => d.income), label: 'Income' },
-        { data: data.map((d) => d.expenses), label: 'Expenses' },
+        {
+          data: data.map((d) => d.income),
+          label: 'Income',
+          borderColor: '#16a34a',
+          backgroundColor: '#16a34a',
+          borderWidth: 2,
+        },
+        {
+          data: data.map((d) => d.expenses),
+          label: 'Expenses',
+          borderColor: '#dc2626',
+          backgroundColor: '#dc2626',
+          borderWidth: 2,
+        },
       ],
     };
   }
