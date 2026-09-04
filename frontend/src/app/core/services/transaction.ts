@@ -71,8 +71,9 @@ export class TransactionService {
     return this.http.get<Summary>(`${this.apiUrl}/summary`);
   }
 
-  getCategorySummary() {
-    return this.http.get<CategorySummary[]>(`${this.apiUrl}/summary/by-category`);
+  getCategorySummary(month: number) {
+    const params = new HttpParams().set('month', month);
+    return this.http.get<CategorySummary[]>(`${this.apiUrl}/summary/by-category`, { params });
   }
 
   getMonthlyTrends(months: number) {

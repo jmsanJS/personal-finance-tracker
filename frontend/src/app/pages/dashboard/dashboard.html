@@ -20,7 +20,7 @@
 
       <section class="recent">
         <div class="section-header">
-          <h2>Recent Transactions</h2>
+          <h2 class="label">Recent Transactions</h2>
           <a routerLink="/transactions">View all</a>
         </div>
 
@@ -44,15 +44,33 @@
       </section>
 
       <section class="card pie-chart">
-        <h2>Expenses</h2>
+        <div class="chart-header">
+          <h2 class="label">Expenses</h2>
+          <div class="pie-chart-range">
+            <label for="month-select">Range:</label>
+            <select
+              id="month-select"
+              (change)="onSelectMonthlyExpensesByCategoryChange($event)"
+              [value]="expensesMonth()"
+            >
+              <option value="1">Actual Month</option>
+              <option value="2">Last Month</option>
+            </select>
+          </div>
+        </div>
         <div class="chart-container chart-container--pie">
-          <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="'pie'"></canvas>
+          <canvas
+            baseChart
+            [data]="pieChartData"
+            [options]="pieChartOptions"
+            [type]="'pie'"
+          ></canvas>
         </div>
       </section>
 
       <section class="card trend-chart">
         <div class="chart-header">
-          <h2>Monthly Trends</h2>
+          <h2 class="label">Monthly Trends</h2>
           <div class="monthly-trends-range">
             <label for="months-select">Range:</label>
             <select

@@ -17,6 +17,7 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { FindTransactionsDto } from './dto/find-transactions.dto';
 import { MonthlyTrendsDto } from './dto/monthly-trends.dto';
+import { MonthlyExpensesDto } from './dto/monthly-expenses.dto';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -39,8 +40,14 @@ export class TransactionsController {
 
   @UseGuards(JwtAuthGuard)
   @Get('summary/by-category')
-  getCategorySummary(@Request() req: { user: { sub: number } }) {
-    return this.transactionsService.getCategorySummary(req.user.sub);
+  getCategorySummary(
+    @Query() query: MonthlyExpensesDto,
+    @Request() req: { user: { sub: number } },
+  ) {
+    return this.transactionsService.getCategorySummary(
+      req.user.sub,
+      query.month ?? 1,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

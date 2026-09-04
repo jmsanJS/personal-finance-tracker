@@ -28,6 +28,7 @@ export class Dashboard implements OnInit {
   categorySummary = signal<CategorySummary[]>([]);
   monthlyTrends = signal<MonthlyTrend[]>([]);
   trendMonths = signal(6);
+  expensesMonth = signal(1);
 
   ngOnInit() {
     this.transactionService.getAll().subscribe({
@@ -36,7 +37,7 @@ export class Dashboard implements OnInit {
     this.transactionService.getSummary().subscribe({
       next: (response) => this.summary.set(response),
     });
-    this.transactionService.getCategorySummary().subscribe({
+    this.transactionService.getCategorySummary(this.expensesMonth()).subscribe({
       next: (response) => this.categorySummary.set(response),
     });
     this.loadMonthlyTrends();
@@ -60,8 +61,28 @@ export class Dashboard implements OnInit {
       .slice(0, 10);
   }
 
+  loadMonthlyExpensesByCategory() {
+    this.transactionService.getCategorySummary(this.expensesMonth()).subscribe({
+      next: (response) => this.categorySummary.set(response),
+    });
+  }
+
+  onSelectMonthlyExpensesByCategoryChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.expensesMonth.set(Number(value));
+    this.loadMonthlyExpensesByCategory();
+  }
+
   get pieChartData() {
     const data = this.categorySummary();
+
+    if (data.length === 0) {
+      return {
+        labels: ['Expenses'],
+        datasets: [{ data: [1] }],
+      };
+    }
+
     return {
       labels: data.map((c) => c.categoryName).sort((a, b) => a.localeCompare(b)),
       datasets: [
@@ -74,12 +95,12 @@ export class Dashboard implements OnInit {
   }
 
   private readonly categoricalPalette = [
+    '#008300',
     '#2a78d6',
     '#eb6834',
     '#1baf7a',
     '#eda100',
     '#e87ba4',
-    '#008300',
     '#4a3aa7',
     '#e34948',
   ];

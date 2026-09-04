@@ -93,7 +93,15 @@ export class TransactionsService {
     };
   }
 
-  async getCategorySummary(userId: number): Promise<CategorySummary[]> {
+  async getCategorySummary(
+    userId: number,
+    month: number,
+  ): Promise<CategorySummary[]> {
+    const now = new Date();
+    const targetMonth = month === 2 ? now.getMonth() - 1 : now.getMonth();
+    const from = new Date(now.getFullYear(), targetMonth, 1);
+    const to = new Date(now.getFullYear(), targetMonth + 1, 1);
+
     const rows: { categoryId: number; categoryName: string; total: string }[] =
       await this.transactionsRepository
         .createQueryBuilder('t')
@@ -103,6 +111,7 @@ export class TransactionsService {
         .addSelect('SUM(t.amount)', 'total')
         .where('t.userId = :userId', { userId })
         .andWhere('t.type = :type', { type: 'expense' })
+        .andWhere('t.date >= :from AND t.date < :to', { from, to })
         .groupBy('c.id')
         .getRawMany();
 
